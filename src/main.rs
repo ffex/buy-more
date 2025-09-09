@@ -1,6 +1,6 @@
-mod product;
+mod models;
 
-use product::Product;
+use models::{Product, Order, TaxAndDiscount};
 use std::io::{Write, stdin, stdout};
 
 macro_rules! pause {
@@ -14,15 +14,26 @@ macro_rules! pause {
 
 fn main() {
     let products = init_avaiable_products();
+    let mut current_order = Order::new(1); // add automatic numeration
+    let tax_and_discount = TaxAndDiscount::origin();
     loop{
         let choice = make_a_choice();
 
         if choice == 1 {
-            print_products(products.as_slice());
+            print_products(products.as_slice()); 
+            pause!();
+        }else if choice == 2 {
+            choice_products(products.as_slice(), &mut current_order);
+
+        }else if choice == 3 {
+            print_cart(&current_order);
+            pause!();
+        }else if choice == 4 {
+            co_print_first_step(&mut current_order, &tax_and_discount);
+            pause!();
         }else if choice == 5{
             break;
         }
-        pause!();
     }
     println!("bye bye!");
 }
@@ -81,3 +92,50 @@ fn init_avaiable_products() -> Vec<Product>{
     ];
     products
 }
+
+fn choice_products(products: &[Product], order: &mut Order){
+    let mut choice = String::new();
+    for product in products {
+        product.print();
+
+        if yes_no("Add this product to the cart? (Y/n)> ", "Please answer yes or no..."){
+            order.add_product(product.clone());
+        }
+    }
+}
+fn yes_no(message: &str, error_message: &str)->bool{// USE MESSAGE, ADD ERROR MESSAGE
+    let mut response = None;
+    let mut readline= String::new();
+
+    while response == None { 
+        print!("{}", message);
+        stdout().flush().unwrap();
+
+        readline.clear();
+        stdin().read_line(&mut readline).unwrap();
+        readline = readline.to_lowercase().trim().to_string();
+        if readline == "" || readline == "y" || readline == "yes" {
+            response = Some(true);
+        }else if readline == "n" || readline == "no"{
+            response = Some(false);
+        }else{
+            print!("{}", error_message);
+            stdout().flush().unwrap();
+            pause!();
+        }
+    }
+    response.unwrap()
+}
+fn print_cart(current_order: &Order){
+    println!("+{:-<100}+", "");
+    println!("|{:<100}|","CART");
+    println!("+{:-<100}+", "");
+    print_products(current_order.products.as_slice());
+    println!("+{:-<100}+", "");
+}
+
+fn co_print_first_step(current_order: &mut Order, tax_and_discount: &TaxAndDiscount){
+    print_cart(current_order);
+    current_order.print_totals(tax_and_discount);
+}
+
