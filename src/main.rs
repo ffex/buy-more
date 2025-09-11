@@ -94,7 +94,6 @@ fn init_avaiable_products() -> Vec<Product>{
 }
 
 fn choice_products(products: &[Product], order: &mut Order){
-    let mut choice = String::new();
     for product in products {
         product.print();
 
@@ -107,14 +106,14 @@ fn yes_no(message: &str, error_message: &str)->bool{// USE MESSAGE, ADD ERROR ME
     let mut response = None;
     let mut readline= String::new();
 
-    while response == None { 
+    while response.is_none(){ 
         print!("{}", message);
         stdout().flush().unwrap();
 
         readline.clear();
         stdin().read_line(&mut readline).unwrap();
         readline = readline.to_lowercase().trim().to_string();
-        if readline == "" || readline == "y" || readline == "yes" {
+        if readline.is_empty() || readline == "y" || readline == "yes" {
             response = Some(true);
         }else if readline == "n" || readline == "no"{
             response = Some(false);

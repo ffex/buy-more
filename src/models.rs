@@ -5,6 +5,7 @@ pub struct Product {
     pub price: f32,
 }
 
+#[allow(dead_code)]
 impl Product {
     pub fn origin() -> Product {
         Product {
@@ -17,7 +18,7 @@ impl Product {
         Product {
             name: name.to_string(),
             description: description.to_string(),
-            price: price,
+            price,
         }
     }
     pub fn print(&self) {
@@ -28,6 +29,7 @@ impl Product {
     }
 }
 
+#[allow(dead_code)]
 pub struct Order {
     pub number: u32,
     pub products: Vec<Product>,
@@ -43,7 +45,7 @@ pub struct Order {
 impl Order {
     pub fn new(number: u32) -> Order {
         Order {
-            number: number,
+            number,
             products: Vec::new(),
             done: false,
             taxable: 0.0,
@@ -58,7 +60,7 @@ impl Order {
         self.products.push(product);
     }
     pub fn print_totals(&mut self, tax_and_discount: &TaxAndDiscount) {
-        self.calculate_totals(&tax_and_discount);
+        self.calculate_totals(tax_and_discount);
         println!("Taxable: {:.2} $", self.taxable);
         println!("IVA: {:.2} $", self.iva_calculated);
         println!("Discount: {:.2} $ ({}%)", self.discount_calculated,self.discount_perc);
@@ -78,14 +80,14 @@ impl Order {
         let mut discount: i32 = 0;
         //discount
         for (threshold, perc) in &tax_and_discount.discount {
-            if (self.taxable >= *threshold) {
+            if self.taxable >= *threshold {
                 discount = *perc;
             }
         }
         self.discount_perc = discount;
         self.discount_calculated = discount as f32 * self.taxable / 100.0;
 
-        if (self.taxable > tax_and_discount.free_delivery_min) {
+        if self.taxable > tax_and_discount.free_delivery_min {
             self.delivery_cost = 0.0;
         } else {
             self.delivery_cost = tax_and_discount.delivery_cost;
