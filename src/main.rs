@@ -1,37 +1,52 @@
-mod models;
+use crate::app::App;
+use models::{Order, Product, TaxAndDiscount};
+use std::io::{Result, Write, stdin, stdout};
 
-use models::{Product, Order, TaxAndDiscount};
-use std::io::{Write, stdin, stdout};
+mod app;
+mod models;
+mod ui;
 
 macro_rules! pause {
     () => {
         let mut buffer = String::new();
-        
-//        println!("Press enter to continue...");
+
+        //        println!("Press enter to continue...");
         stdin().read_line(&mut buffer).expect("Failed to read line");
     };
 }
 
-fn main() {
+fn main() -> Result<()> {
     let products = init_avaiable_products();
     let mut current_order = Order::new(1); // add automatic numeration
     let tax_and_discount = TaxAndDiscount::origin();
-    loop{
+
+    let mut terminal = ratatui::init();
+    let mut app = App::new(products, current_order, tax_and_discount);
+
+    let app_result = app.run(&mut terminal);
+    ratatui::restore();
+    app_result
+}
+
+fn run_cli() {
+    let products = init_avaiable_products();
+    let mut current_order = Order::new(1); // add automatic numeration
+    let tax_and_discount = TaxAndDiscount::origin();
+    loop {
         let choice = make_a_choice();
 
         if choice == 1 {
-            print_products(products.as_slice()); 
+            print_products(products.as_slice());
             pause!();
-        }else if choice == 2 {
+        } else if choice == 2 {
             choice_products(products.as_slice(), &mut current_order);
-
-        }else if choice == 3 {
+        } else if choice == 3 {
             print_cart(&current_order);
             pause!();
-        }else if choice == 4 {
+        } else if choice == 4 {
             co_print_first_step(&mut current_order, &tax_and_discount);
             pause!();
-        }else if choice == 5{
+        } else if choice == 5 {
             break;
         }
     }
@@ -51,9 +66,10 @@ fn make_a_choice() -> u8 {
         stdin().read_line(&mut choice).unwrap();
 
         println!("Choice: {}", choice.trim());
-        if choice.trim().parse::<u8>().is_ok(){
+        if choice.trim().parse::<u8>().is_ok() {
             let choice_u8: u8 = choice.trim().parse().unwrap();
-            if choice_u8 <= 5 && choice_u8 > 0{ //TODO put 5 in a constant?
+            if choice_u8 <= 5 && choice_u8 > 0 {
+                //TODO put 5 in a constant?
                 break;
             }
         }
@@ -79,13 +95,13 @@ fn clear_screen() {
     print!("{esc}[2J{esc}[1;1H", esc = 27 as char);
 }
 
-fn print_products(products: &[Product]){
+fn print_products(products: &[Product]) {
     for product in products {
         product.print();
     }
 }
 
-fn init_avaiable_products() -> Vec<Product>{
+fn init_avaiable_products() -> Vec<Product> {
     let products = vec![
         Product::new("Apple I", "The first Apple Computer!", 1499.0),
         Product::new("Apple II", "The second Apple Computer!", 1499.0),
@@ -93,20 +109,24 @@ fn init_avaiable_products() -> Vec<Product>{
     products
 }
 
-fn choice_products(products: &[Product], order: &mut Order){
+fn choice_products(products: &[Product], order: &mut Order) {
     for product in products {
         product.print();
 
-        if yes_no("Add this product to the cart? (Y/n)> ", "Please answer yes or no..."){
+        if yes_no(
+            "Add this product to the cart? (Y/n)> ",
+            "Please answer yes or no...",
+        ) {
             order.add_product(product.clone());
         }
     }
 }
-fn yes_no(message: &str, error_message: &str)->bool{// USE MESSAGE, ADD ERROR MESSAGE
+fn yes_no(message: &str, error_message: &str) -> bool {
+    // USE MESSAGE, ADD ERROR MESSAGE
     let mut response = None;
-    let mut readline= String::new();
+    let mut readline = String::new();
 
-    while response.is_none(){ 
+    while response.is_none() {
         print!("{}", message);
         stdout().flush().unwrap();
 
@@ -115,9 +135,9 @@ fn yes_no(message: &str, error_message: &str)->bool{// USE MESSAGE, ADD ERROR ME
         readline = readline.to_lowercase().trim().to_string();
         if readline.is_empty() || readline == "y" || readline == "yes" {
             response = Some(true);
-        }else if readline == "n" || readline == "no"{
+        } else if readline == "n" || readline == "no" {
             response = Some(false);
-        }else{
+        } else {
             print!("{}", error_message);
             stdout().flush().unwrap();
             pause!();
@@ -125,16 +145,15 @@ fn yes_no(message: &str, error_message: &str)->bool{// USE MESSAGE, ADD ERROR ME
     }
     response.unwrap()
 }
-fn print_cart(current_order: &Order){
+fn print_cart(current_order: &Order) {
     println!("+{:-<100}+", "");
-    println!("|{:<100}|","CART");
+    println!("|{:<100}|", "CART");
     println!("+{:-<100}+", "");
     print_products(current_order.products.as_slice());
     println!("+{:-<100}+", "");
 }
 
-fn co_print_first_step(current_order: &mut Order, tax_and_discount: &TaxAndDiscount){
+fn co_print_first_step(current_order: &mut Order, tax_and_discount: &TaxAndDiscount) {
     print_cart(current_order);
     current_order.print_totals(tax_and_discount);
 }
-
