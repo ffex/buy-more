@@ -27,7 +27,9 @@ pub fn render_app(frame: &mut Frame, app: &App) {
         Screen::Cart => {
             print_cart(frame, app, chunks[1]);
         }
-        Screen::Payment => todo!(),
+        Screen::Payment => {
+            print_popup_confirm(frame, app, chunks[1]);
+        }
     }
     print_footer(frame, app, chunks[2]);
 }
@@ -166,8 +168,14 @@ pub fn print_footer(frame: &mut Frame, app: &App, area: Rect) {
             "(q) Quit | (a) Add | (r) Remove | (c) Checkout",
             Style::default().fg(Color::Blue),
         ),
-        Screen::Cart => Span::styled("(q) Quit | (m) Main", Style::default().fg(Color::Blue)),
-        Screen::Payment => todo!(),
+        Screen::Cart => Span::styled(
+            "(q) Quit | (m) Main | (p) Payment",
+            Style::default().fg(Color::Blue),
+        ),
+        Screen::Payment => Span::styled(
+            "(q) Quit | (m) Main | (p) Payment",
+            Style::default().fg(Color::Blue),
+        ),
     };
 
     let current_nav = Paragraph::new(Line::from(current_navigation_text))
@@ -183,4 +191,45 @@ pub fn print_footer(frame: &mut Frame, app: &App, area: Rect) {
 
     frame.render_widget(current_nav, footer_chunks[0]);
     frame.render_widget(current_nav_key_hint, footer_chunks[1]);
+}
+pub fn print_popup_confirm(frame: &mut Frame, app: &App, area: Rect) {
+    let popup_area = centered_rect(40, 50, area);
+
+    //Clear the area
+    frame.render_widget(Clear, popup_area);
+
+    let popup_block = Block::default()
+        .borders(Borders::ALL)
+        .title("Confirm")
+        .style(Style::default().bg(Color::Blue));
+
+    let exit_text = Text::styled(
+        "Do you want confirm the order? Y/n",
+        Style::default().fg(Color::Red),
+    );
+
+    let exit_paragraph = Paragraph::new(exit_text)
+        .block(popup_block)
+        .wrap(Wrap { trim: false });
+
+    frame.render_widget(exit_paragraph, popup_area);
+}
+fn centered_rect(perc_x: u16, perc_y: u16, area: Rect) -> Rect {
+    let popup_layout = Layout::default()
+        .direction(Direction::Vertical)
+        .constraints([
+            Constraint::Percentage((100 - perc_y) / 2),
+            Constraint::Percentage(perc_y),
+            Constraint::Percentage((100 - perc_y) / 2),
+        ])
+        .split(area);
+
+    Layout::default()
+        .direction(Direction::Horizontal)
+        .constraints([
+            Constraint::Percentage((100 - perc_x) / 2),
+            Constraint::Percentage(perc_x),
+            Constraint::Percentage((100 - perc_x) / 2),
+        ])
+        .split(popup_layout[1])[1]
 }

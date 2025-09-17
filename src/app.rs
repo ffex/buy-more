@@ -98,10 +98,12 @@ impl App {
                 },
                 Screen::Payment => match key_event.code {
                     KeyCode::Char('y') => {
-                        todo!();
+                        let next_order_id = self.order.number + 1;
+                        self.order = Order::new(next_order_id);
+                        self.current_screen = Screen::Main;
                     }
                     KeyCode::Char('n') => {
-                        todo!();
+                        self.current_screen = Screen::Cart;
                     }
                     _ => {}
                 },
