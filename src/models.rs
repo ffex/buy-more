@@ -1,8 +1,11 @@
-#[derive(Clone, Debug)]
+use serde::Deserialize;
+
+#[derive(Clone, Debug, Deserialize)]
 pub struct Product {
     pub name: String,
     pub description: String,
     pub price: f32,
+    #[serde(default)]
     pub in_cart: bool,
 }
 
@@ -26,7 +29,7 @@ impl Product {
     }
     pub fn print(&self) {
         println!(
-            "Prodotto: {:<10} | {:<50} | {} $",
+            "Product: {:<10} | {:<50} | {} $",
             self.name, self.description, self.price
         );
     }

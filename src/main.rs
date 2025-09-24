@@ -1,5 +1,7 @@
 use crate::app::App;
 use models::{Order, Product, TaxAndDiscount};
+use serde_json;
+use std::fs;
 use std::io::{Result, Write, stdin, stdout};
 
 mod app;
@@ -102,10 +104,9 @@ fn print_products(products: &[Product]) {
 }
 
 fn init_avaiable_products() -> Vec<Product> {
-    let products = vec![
-        Product::new("Apple I", "The first Apple Computer!", 1499.0),
-        Product::new("Apple II", "The second Apple Computer!", 1499.0),
-    ];
+    let json = fs::read_to_string("assets/products.json").expect("Failed to read the JSON file.");
+    let products: Vec<Product> = serde_json::from_str(&json).expect("Faile to parse JSON file");
+
     products
 }
 

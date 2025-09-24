@@ -1,0 +1,52 @@
+[
+  {
+    "name": "Dreamy Nights Pillow",
+    "price": 29.99,
+    "description": "Indulge in the softness of our Dreamy Nights pillow, filled with premium down alternative and designed to cradle your head and neck for a restful night's sleep."
+  },
+  {
+    "name": "Sunny Sippers Mug",
+    "price": 12.95,
+    "description": "Brighten up your morning with our vibrant Sunny Sippers mug! Made from durable ceramic and featuring a unique design, this mug is perfect for coffee or tea lovers on-the-go."
+  },
+  {
+    "name": "TechTrek Backpack",
+    "price": 49.99,
+    "description": "Stay organized and connected on the go with our TechTrek backpack, featuring multiple pockets, USB charging ports, and a sleek water-resistant design."
+  },
+  {
+    "name": "Sparkle & Shine Jewelry Box",
+    "price": 19.95,
+    "description": "Add a touch of elegance to your dressing routine with our Sparkle & Shine jewelry box! Made from luxurious velvet and featuring a mirror-backed interior, this box is perfect for storing your favorite accessories."
+  },
+  {
+    "name": "Cozy Comfort Blanket",
+    "price": 39.99,
+    "description": "Wrap yourself in warmth and comfort with our plush Cozy Comfort blanket, made from super-soft fleece and designed to keep you cozy on chilly evenings."
+  },
+  {
+    "name": "Fresh Frenzy Candles (Set of 3)",
+    "price": 24.95,
+    "description": "Brighten up your home with the invigorating scents of our Fresh Frenzy candles! Each set features three fragrances: Citrus Burst, Floral Delight, and Eucalyptus Refresh."
+  },
+  {
+    "name": "Urban Oasis Planter",
+    "price": 29.99,
+    "description": "Bring a touch of greenery into your home with our stylish Urban Oasis planter, featuring a sleek ceramic design and self-watering system for low-maintenance care."
+  },
+  {
+    "name": "Adventure Awaits Travel Bag",
+    "price": 49.95,
+    "description": "Embark on your next adventure in style with our spacious Adventure Awaits travel bag! Made from durable nylon and featuring multiple pockets, this bag is perfect for weekend getaways or extended trips."
+  },
+  {
+    "name": "Bookworm Bliss Journal",
+    "price": 14.99,
+    "description": "Record your thoughts and inspirations in our beautifully designed Bookworm Bliss journal! Featuring high-quality paper and a sturdy cover, this journal is perfect for writers, artists, and anyone who loves to jot down ideas."
+  },
+  {
+    "name": "Morning Sunrise Essential Oil Diffuser",
+    "price": 39.99,
+    "description": "Start your day off right with the soothing aromas of our Morning Sunrise essential oil diffuser! Featuring a compact design and adjustable mist setting, this diffuser is perfect for creating a relaxing atmosphere in any room."
+  }
+]
