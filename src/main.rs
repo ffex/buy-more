@@ -18,6 +18,42 @@ macro_rules! pause {
 }
 
 fn main() -> Result<()> {
+    let args: Vec<String> = std::env::args().collect();
+
+    if args.len() > 1 && args[1] == "--help" {
+        display_help();
+        return Ok(());
+    }
+
+    let mode = if args.len() > 1 && (args[1] == "--tui" || args[1] == "--cli") {
+        &args[1]
+    } else {
+        "--tui"
+    };
+
+    match mode {
+        "--tui" => run_tui(),
+        "--cli" => {
+            run_cli();
+            Ok(())
+        }
+        _ => {
+            eprintln!("Invalid mode. Use --tui, --cli, or --help");
+            std::process::exit(1);
+        }
+    }
+}
+
+fn display_help() {
+    println!("Usage: buymore [OPTIONS]");
+    println!("");
+    println!("Options:");
+    println!("  --tui      Run the application in TUI mode (default)");
+    println!("  --cli      Run the application in CLI mode");
+    println!("  --help     Display this help message and exit");
+}
+
+fn run_tui() -> Result<()> {
     let products = init_avaiable_products();
     let mut current_order = Order::new(1); // add automatic numeration
     let tax_and_discount = TaxAndDiscount::origin();
