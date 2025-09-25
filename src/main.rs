@@ -1,6 +1,5 @@
 use crate::app::App;
 use models::{Order, Product, TaxAndDiscount};
-use serde_json;
 use std::fs;
 use std::io::{Result, Write, stdin, stdout};
 
@@ -46,7 +45,7 @@ fn main() -> Result<()> {
 
 fn display_help() {
     println!("Usage: buymore [OPTIONS]");
-    println!("");
+    println!();
     println!("Options:");
     println!("  --tui      Run the application in TUI mode (default)");
     println!("  --cli      Run the application in CLI mode");
@@ -55,7 +54,7 @@ fn display_help() {
 
 fn run_tui() -> Result<()> {
     let products = init_avaiable_products();
-    let mut current_order = Order::new(1); // add automatic numeration
+    let current_order = Order::new(1); // add automatic numeration
     let tax_and_discount = TaxAndDiscount::origin();
 
     let mut terminal = ratatui::init();

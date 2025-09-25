@@ -19,7 +19,7 @@ pub fn render_app(frame: &mut Frame, app: &App) {
         ])
         .split(frame.area());
 
-    print_header(frame, app, chunks[0]);
+    print_header(frame, chunks[0]);
     match app.current_screen {
         Screen::Main => {
             print_main(frame, app, chunks[1]);
@@ -28,12 +28,12 @@ pub fn render_app(frame: &mut Frame, app: &App) {
             print_cart(frame, app, chunks[1]);
         }
         Screen::Payment => {
-            print_popup_confirm(frame, app, chunks[1]);
+            print_popup_confirm(frame, chunks[1]);
         }
     }
     print_footer(frame, app, chunks[2]);
 }
-pub fn print_header(frame: &mut Frame, app: &App, area: Rect) {
+pub fn print_header(frame: &mut Frame, area: Rect) {
     // Title
     let title_block = Block::default()
         .borders(Borders::ALL)
@@ -118,10 +118,9 @@ pub fn print_cart(frame: &mut Frame, app: &App, area: Rect) {
         .order
         .products
         .iter()
-        .enumerate()
-        .map(|(i, product)| {
+        .map(|product| {
             let style = Style::default();
-            ListItem::new(format!("{}", &product.name)).style(style)
+            ListItem::new(product.name.to_string()).style(style)
         })
         .collect();
 
@@ -192,7 +191,7 @@ pub fn print_footer(frame: &mut Frame, app: &App, area: Rect) {
     frame.render_widget(current_nav, footer_chunks[0]);
     frame.render_widget(current_nav_key_hint, footer_chunks[1]);
 }
-pub fn print_popup_confirm(frame: &mut Frame, app: &App, area: Rect) {
+pub fn print_popup_confirm(frame: &mut Frame, area: Rect) {
     let popup_area = centered_rect(40, 50, area);
 
     //Clear the area

@@ -41,22 +41,17 @@ impl App {
     pub fn run(&mut self, terminal: &mut DefaultTerminal) -> Result<(), Error> {
         while !self.exit {
             // Your code here
-            if event::poll(Duration::from_millis(16))? {
-                if let CEvent::Key(key) = event::read()? {
-                    self.handle_key_event(key);
-                }
+            if event::poll(Duration::from_millis(16))? && let CEvent::Key(key) = event::read()? {
+                self.handle_key_event(key);
             }
-            terminal.draw(|frame| render_app(frame, self));
+            terminal.draw(|frame| render_app(frame, self))?;
         }
         Ok(())
     }
 
     pub fn handle_key_event(&mut self, key_event: KeyEvent) {
         if key_event.kind == crossterm::event::KeyEventKind::Press {
-            match key_event.code {
-                KeyCode::Char('q') => self.exit = true,
-                _ => {}
-            }
+            if let KeyCode::Char('q') =  key_event.code {self.exit = true};
             match self.current_screen {
                 Screen::Main => match key_event.code {
                     KeyCode::Up => {
@@ -79,7 +74,7 @@ impl App {
                     KeyCode::Char('r') => {
                         let product = &mut self.available_products[self.selected_product_index];
                         product.in_cart = false;
-                        self.order.remove_product(&product);
+                        self.order.remove_product(product);
                     }
                     KeyCode::Char('c') => {
                         self.order.calculate_totals(&self.tax_and_discount);
