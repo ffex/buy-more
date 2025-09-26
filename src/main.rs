@@ -92,6 +92,7 @@ fn run_cli() {
 
 fn make_a_choice() -> u8 {
     let mut choice = String::new();
+    let max_choice = 5;
     loop {
         clear_screen();
         print_menu();
@@ -105,8 +106,7 @@ fn make_a_choice() -> u8 {
         println!("Choice: {}", choice.trim());
         if choice.trim().parse::<u8>().is_ok() {
             let choice_u8: u8 = choice.trim().parse().unwrap();
-            if choice_u8 <= 5 && choice_u8 > 0 {
-                //TODO put 5 in a constant?
+            if choice_u8 <= max_choice && choice_u8 > 0 {
                 break;
             }
         }
