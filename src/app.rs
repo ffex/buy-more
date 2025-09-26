@@ -41,7 +41,9 @@ impl App {
     pub fn run(&mut self, terminal: &mut DefaultTerminal) -> Result<(), Error> {
         while !self.exit {
             // Your code here
-            if event::poll(Duration::from_millis(16))? && let CEvent::Key(key) = event::read()? {
+            if event::poll(Duration::from_millis(16))?
+                && let CEvent::Key(key) = event::read()?
+            {
                 self.handle_key_event(key);
             }
             terminal.draw(|frame| render_app(frame, self))?;
@@ -51,7 +53,9 @@ impl App {
 
     pub fn handle_key_event(&mut self, key_event: KeyEvent) {
         if key_event.kind == crossterm::event::KeyEventKind::Press {
-            if let KeyCode::Char('q') =  key_event.code {self.exit = true};
+            if let KeyCode::Char('q') = key_event.code {
+                self.exit = true
+            };
             match self.current_screen {
                 Screen::Main => match key_event.code {
                     KeyCode::Up => {
@@ -93,9 +97,10 @@ impl App {
                 },
                 Screen::Payment => match key_event.code {
                     KeyCode::Char('y') => {
-                        let next_order_id = self.order.number + 1;
-                        self.order = Order::new(next_order_id);
-                        self.current_screen = Screen::Main;
+                        self.reset_order();
+                    }
+                    KeyCode::Enter => {
+                        self.reset_order();
                     }
                     KeyCode::Char('n') => {
                         self.current_screen = Screen::Cart;
@@ -103,6 +108,14 @@ impl App {
                     _ => {}
                 },
             }
+        }
+    }
+    fn reset_order(&mut self) {
+        let next_order_id = self.order.number + 1;
+        self.order = Order::new(next_order_id);
+        self.current_screen = Screen::Main;
+        for product in &mut self.available_products {
+            product.in_cart = false;
         }
     }
 }
