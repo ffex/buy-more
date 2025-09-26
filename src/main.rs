@@ -69,7 +69,7 @@ fn run_cli(products: Vec<Product>, mut current_order: Order, tax_and_discount: T
         let choice = make_a_choice();
 
         if choice == 1 {
-            print_products(products.as_slice());
+            print_products(products.as_slice(),false);
             pause!();
         } else if choice == 2 {
             choice_products(products.as_slice(), &mut current_order);
@@ -128,9 +128,13 @@ fn clear_screen() {
     print!("{esc}[2J{esc}[1;1H", esc = 27 as char);
 }
 
-fn print_products(products: &[Product]) {
+fn print_products(products: &[Product], short:bool) {
     for product in products {
-        product.print();
+        if short {
+            product.short_print();
+        }else{
+            product.print();
+        }
     }
 }
 
@@ -142,7 +146,7 @@ fn init_avaiable_products() -> Vec<Product> {
 
 fn choice_products(products: &[Product], order: &mut Order) {
     for product in products {
-        product.print();
+        product.short_print();
 
         if yes_no(
             "Add this product to the cart? (Y/n)> ",
@@ -180,7 +184,7 @@ fn print_cart(current_order: &Order) {
     println!("+{:-<100}+", "");
     println!("|{:<100}|", "CART");
     println!("+{:-<100}+", "");
-    print_products(current_order.products.as_slice());
+    print_products(current_order.products.as_slice(),true);
     println!("+{:-<100}+", "");
 }
 

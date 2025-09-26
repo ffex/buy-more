@@ -29,10 +29,24 @@ impl Product {
     }
     pub fn print(&self) {
         println!(
-            "Product: {:<10} | {:<50} | {} $",
-            self.name, self.description, self.price
+            "Product: {:<50} | {:<70} | {} $",
+            self.name, Self::wrap_with_ellipsis(&self.description,70), self.price
         );
     }
+    pub fn short_print(&self) {
+        println!(
+            "Product: {:<10} | {} $",
+            self.name, self.price
+        );
+    }
+    fn wrap_with_ellipsis(s: &str, max_len: usize) -> String {
+        if s.len() > max_len {
+            format!("{}...", &s[..(max_len-3)])
+        } else {
+            s.to_string()
+        }
+    }
+
 }
 
 #[allow(dead_code)]
