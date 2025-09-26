@@ -204,7 +204,7 @@ pub fn print_popup_confirm(frame: &mut Frame, area: Rect) {
 
     let exit_text = Text::styled(
         "Do you want confirm the order? Y/n",
-        Style::default().fg(Color::Red),
+        Style::default().fg(Color::White),
     );
 
     let exit_paragraph = Paragraph::new(exit_text)
