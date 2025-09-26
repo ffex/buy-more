@@ -1,11 +1,12 @@
 use crate::app::App;
 use models::{Order, Product, TaxAndDiscount};
-use std::fs;
 use std::io::{Result, Write, stdin, stdout};
 
 mod app;
 mod models;
 mod ui;
+
+const AV_PRODS: &str = include_str!("../assets/products.json");
 
 macro_rules! pause {
     () => {
@@ -134,8 +135,7 @@ fn print_products(products: &[Product]) {
 }
 
 fn init_avaiable_products() -> Vec<Product> {
-    let json = fs::read_to_string("assets/products.json").expect("Failed to read the JSON file.");
-    let products: Vec<Product> = serde_json::from_str(&json).expect("Faile to parse JSON file");
+    let products: Vec<Product> = serde_json::from_str(AV_PRODS).expect("Faile to parse JSON file");
 
     products
 }
