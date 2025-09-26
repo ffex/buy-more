@@ -11,7 +11,6 @@ macro_rules! pause {
     () => {
         let mut buffer = String::new();
 
-        //        println!("Press enter to continue...");
         stdin().read_line(&mut buffer).expect("Failed to read line");
     };
 }
@@ -29,11 +28,14 @@ fn main() -> Result<()> {
     } else {
         "--tui"
     };
+    let products = init_avaiable_products();
+    let current_order = Order::new(1); // add automatic numeration
+    let tax_and_discount = TaxAndDiscount::origin();
 
     match mode {
-        "--tui" => run_tui(),
+        "--tui" => run_tui(products,current_order,tax_and_discount),
         "--cli" => {
-            run_cli();
+            run_cli(products,current_order,tax_and_discount);
             Ok(())
         }
         _ => {
@@ -52,11 +54,7 @@ fn display_help() {
     println!("  --help     Display this help message and exit");
 }
 
-fn run_tui() -> Result<()> {
-    let products = init_avaiable_products();
-    let current_order = Order::new(1); // add automatic numeration
-    let tax_and_discount = TaxAndDiscount::origin();
-
+fn run_tui(products: Vec<Product>, current_order: Order, tax_and_discount: TaxAndDiscount) -> Result<()> {
     let mut terminal = ratatui::init();
     let mut app = App::new(products, current_order, tax_and_discount);
 
@@ -65,10 +63,7 @@ fn run_tui() -> Result<()> {
     app_result
 }
 
-fn run_cli() {
-    let products = init_avaiable_products();
-    let mut current_order = Order::new(1); // add automatic numeration
-    let tax_and_discount = TaxAndDiscount::origin();
+fn run_cli(products: Vec<Product>, mut current_order: Order, tax_and_discount: TaxAndDiscount) {
     loop {
         let choice = make_a_choice();
 

@@ -134,7 +134,7 @@ pub fn print_cart(frame: &mut Frame, app: &App, area: Rect) {
 
     let checkout_detail = vec![
         Line::from(format!("Taxable: {:.2} $", app.order.taxable)),
-        Line::from(format!("IVA: {:.2} $", app.order.iva_calculated)),
+        Line::from(format!("VAT: {:.2} $", app.order.vat_calculated)),
         Line::from(format!(
             "Discount: {:.2} $ ({}%)",
             app.order.discount_calculated, app.order.discount_perc

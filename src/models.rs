@@ -41,7 +41,7 @@ pub struct Order {
     pub number: u32,
     pub products: Vec<Product>,
     pub taxable: f32,
-    pub iva_calculated: f32,
+    pub vat_calculated: f32,
     pub discount_perc: i32,
     pub discount_calculated: f32,
     pub delivery_cost: f32,
@@ -56,7 +56,7 @@ impl Order {
             products: Vec::new(),
             done: false,
             taxable: 0.0,
-            iva_calculated: 0.0,
+            vat_calculated: 0.0,
             discount_perc: 0,
             discount_calculated: 0.0,
             delivery_cost: 0.0,
@@ -69,7 +69,7 @@ impl Order {
     pub fn print_totals(&mut self, tax_and_discount: &TaxAndDiscount) {
         self.calculate_totals(tax_and_discount);
         println!("Taxable: {:.2} $", self.taxable);
-        println!("IVA: {:.2} $", self.iva_calculated);
+        println!("VAT: {:.2} $", self.vat_calculated);
         println!(
             "Discount: {:.2} $ ({}%)",
             self.discount_calculated, self.discount_perc
@@ -85,8 +85,8 @@ impl Order {
             .map(|product| product.price)
             .sum::<f32>();
 
-        //calculate iva
-        self.iva_calculated = self.taxable * tax_and_discount.iva as f32 / 100.00;
+        //calculate vat
+        self.vat_calculated = self.taxable * tax_and_discount.vat as f32 / 100.00;
         let mut discount: i32 = 0;
         //discount
         for (threshold, perc) in &tax_and_discount.discount {
@@ -103,7 +103,7 @@ impl Order {
             self.delivery_cost = tax_and_discount.delivery_cost;
         }
         self.totals =
-            self.taxable + self.iva_calculated + self.delivery_cost - self.discount_calculated;
+            self.taxable + self.vat_calculated + self.delivery_cost - self.discount_calculated;
     }
 
     pub fn remove_product(&mut self, product: &Product) {
@@ -115,7 +115,7 @@ impl Order {
 
 #[derive(Debug)]
 pub struct TaxAndDiscount {
-    pub iva: i8,
+    pub vat: i8,
     pub discount: Vec<(f32, i32)>,
     pub free_delivery_min: f32,
     pub delivery_cost: f32,
@@ -124,7 +124,7 @@ pub struct TaxAndDiscount {
 impl TaxAndDiscount {
     pub fn origin() -> TaxAndDiscount {
         TaxAndDiscount {
-            iva: 22,
+            vat: 22,
             discount: vec![(1000.00, 5), (1500.00, 10), (2000.00, 20)],
             free_delivery_min: 100.00,
             delivery_cost: 45.00,
