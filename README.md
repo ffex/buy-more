@@ -2,6 +2,10 @@
 
 RustBuy is a simple command-line interface (CLI) e-commerce application built in Rust, designed specifically to help you understand and practice working with terminal user interfaces (TUI) in Rust.
 
+![A gif demo of the script](demo.gif)
+
+The above example was generated with [VHS](https://github.com/charmbracelet/vhs/)
+
 ## Overview
 
 RustBuy allows users to browse available products, add them to an order, view the cart, and complete checkout. The application calculates taxes and discounts based on predefined thresholds.

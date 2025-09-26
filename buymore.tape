@@ -6,7 +6,7 @@ Set FontSize 17
 Set Width 1300
 Set Height 650
 
-Type "target/release/buy-more"
+Type "buy-more"
 Sleep 500ms
 Enter
 
